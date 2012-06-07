@@ -1,4 +1,4 @@
-﻿define(['render/Screen', 'render/Asset', 'game/Entity', 'game/Globals'], function (page, Asset, Entity, Globals) {
+﻿define(['render/Screen', 'render/ArtAsset2d', 'game/Entity', 'game/Globals'], function (page, Asset, Entity, Globals) {
 	'use strict';
 
 	Bullet.prototype = new Entity();
@@ -40,12 +40,12 @@
 		}
 
 		page.drawImage(this.asset.image,
-					   this.asset.info.x[this.asset.info[this.type]],
-					   this.asset.info.y[this.asset.info[this.type]],
-					   this.asset.info.w[this.asset.info[this.type]],
-					   this.asset.info.h[this.asset.info[this.type]],
-					   this._x, this._y, this.asset.info.w[this.asset.info[this.type]],
-					   this.asset.info.h[this.asset.info[this.type]]);
+					   this.asset.x[this.asset[this.type]],
+					   this.asset.y[this.asset[this.type]],
+					   this.asset.w[this.asset[this.type]],
+					   this.asset.h[this.asset[this.type]],
+					   this._x, this._y, this.asset.w[this.asset[this.type]],
+					   this.asset.h[this.asset[this.type]]);
 	};
 
 	return Bullet;

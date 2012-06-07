@@ -1,7 +1,7 @@
 ﻿/*jslint browser: true, maxerr: 50, indent: 4 */
 /*global define*/
 define(['render/Screen',
-        'render/Asset',
+        'render/ArtAsset2d',
         'utils/EventHandler',
         'game/Globals',
         'game/Bullet',
@@ -69,21 +69,21 @@ define(['render/Screen',
 			Globals.entityFactory.add(new Bullet(this.x, this.y, 0, -1, 'p_standard'));
 		}
 
-		if (this.currentFrame < this.assets.info[this._state].animation.length - 1) {
+		if (this.currentFrame < this.assets[this._state].animation.length - 1) {
 			this.currentFrame += 1;
-		} else if (this.assets.info[this._state].repeat) {
+		} else if (this.assets[this._state].repeat) {
 			this.currentFrame = 0;
 		}
 	};
 
 	Player.prototype.draw = function () {
 		page.drawImage(this.assets.image,
-					   this.assets.info.x[this.assets.info[this._state].animation[this.currentFrame]],
-					   this.assets.info.y[this.assets.info[this._state].animation[this.currentFrame]],
-					   this.assets.info.w[this.assets.info[this._state].animation[this.currentFrame]],
-					   this.assets.info.h[this.assets.info[this._state].animation[this.currentFrame]],
-					   this.x, this.y, this.assets.info.w[this.assets.info[this._state].animation[this.currentFrame]],
-					   this.assets.info.h[this.assets.info[this._state].animation[this.currentFrame]]);
+					   this.assets.x[this.assets[this._state].animation[this.currentFrame]],
+					   this.assets.y[this.assets[this._state].animation[this.currentFrame]],
+					   this.assets.w[this.assets[this._state].animation[this.currentFrame]],
+					   this.assets.h[this.assets[this._state].animation[this.currentFrame]],
+					   this.x, this.y, this.assets.w[this.assets[this._state].animation[this.currentFrame]],
+					   this.assets.h[this.assets[this._state].animation[this.currentFrame]]);
 	};
 
 	return Player;
