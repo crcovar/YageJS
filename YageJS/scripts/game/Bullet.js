@@ -1,4 +1,9 @@
-﻿define(['render/Screen', 'render/ArtAsset2d', 'game/Entity', 'game/Globals'], function (page, Asset, Entity, Globals) {
+﻿/*jslint browser: true, maxerr: 50, indent: 4 */
+/*global define*/
+define(['render/Screen',
+        'render/ArtAsset2d',
+        'game/Entity',
+        'game/YageJS'], function (page, Asset, Entity, Globals) {
 	'use strict';
 
 	Bullet.prototype = new Entity();
@@ -34,8 +39,8 @@
 		}
 	};
 
-	Bullet.prototype.draw = function() {
-		if(this.getState() === null) {
+	Bullet.prototype.draw = function () {
+		if (this.getState() === null) {
 			return;
 		}
 

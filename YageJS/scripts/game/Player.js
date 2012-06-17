@@ -3,7 +3,7 @@
 define(['render/Screen',
         'render/ArtAsset2d',
         'utils/EventHandler',
-        'game/Globals',
+        'game/YageJS',
         'game/Bullet',
         'game/Entity'], function (page, Asset, EventHandler, Globals, Bullet, Entity) {
 	'use strict';

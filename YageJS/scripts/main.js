@@ -3,7 +3,7 @@
 	scriptType: 'application/javascript'
 });
 
-require(['render/Screen', 'game/Player', 'game/Globals', 'utils/systemEvents!'], function(page, Player, Globals) {
+require(['render/Screen', 'game/Player', 'game/YageJS', 'utils/systemEvents!'], function(page, Player, Globals) {
 	'use strict';
 
 	function update(rate) {
