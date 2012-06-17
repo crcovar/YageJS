@@ -5,9 +5,17 @@ define(['lib/domReady!'], function (doc) {
 
 	var screen = {},
 		width = 640,
-		height = 720,
+		height = 480,
 		canvas = doc.getElementById('screen'),
-		context = canvas.getContext('2d');
+		context;
+
+	if (canvas === null) {
+		canvas = document.createElement('canvas');
+		canvas.setAttribute('id', 'screen');
+		document.body.insertBefore(canvas);
+	}
+
+	context = canvas.getContext('2d');
 
 	screen.getWidth = function () {
 		return width;
