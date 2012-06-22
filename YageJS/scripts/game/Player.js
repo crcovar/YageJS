@@ -3,11 +3,11 @@
 define(['render/Screen',
         'render/ArtAsset2d',
         'utils/EventHandler',
-        'game/YageJS',
-        'game/Bullet',
-        'game/Entity'], function (page, Asset, EventHandler, Globals, Bullet, Entity) {
+        'utils/keyCodes',
+        'game/Entity'], function (page, Asset, EventHandler, keys, Entity) {
 	'use strict';
-	var keyboard = [];
+	var keyboard = [],
+		VELOCITY = 8;
 
 	Player.prototype = new Entity();
 	Player.prototype.constructor = Player;
@@ -30,19 +30,19 @@ define(['render/Screen',
 	};
 
 	Player.prototype.moveLeft = function () {
-		this.x -= Globals.VELOCITY;
+		this.x -= VELOCITY;
 	};
 
 	Player.prototype.moveRight = function () {
-		this.x += Globals.VELOCITY;
+		this.x += VELOCITY;
 	};
 
 	Player.prototype.moveUp = function () {
-		this.y -= Globals.VELOCITY;
+		this.y -= VELOCITY;
 	};
 
 	Player.prototype.moveDown = function () {
-		this.y += Globals.VELOCITY;
+		this.y += VELOCITY;
 	};
 
 	Player.prototype.changeState = function (state) {
@@ -52,21 +52,17 @@ define(['render/Screen',
 	};
 
 	Player.prototype.update = function () {
-		if (keyboard[Globals.keys.W] || keyboard[Globals.keys.UP_ARROW]) {
+		if (keyboard[keys.W] || keyboard[keys.UP_ARROW]) {
 			this.moveUp();
 		}
-		if (keyboard[Globals.keys.S] || keyboard[Globals.keys.DOWN_ARROW]) {
+		if (keyboard[keys.S] || keyboard[keys.DOWN_ARROW]) {
 			this.moveDown();
 		}
-		if (keyboard[Globals.keys.A] || keyboard[Globals.keys.LEFT_ARROW]) {
+		if (keyboard[keys.A] || keyboard[keys.LEFT_ARROW]) {
 			this.moveLeft();
 		}
-		if (keyboard[Globals.keys.D] || keyboard[Globals.keys.RIGHT_ARROW]) {
+		if (keyboard[keys.D] || keyboard[keys.RIGHT_ARROW]) {
 			this.moveRight();
-		}
-
-		if (keyboard[Globals.keys.R]) {
-			Globals.entityFactory.add(new Bullet(this.x, this.y, 0, -1, 'p_standard'));
 		}
 
 		if (this.currentFrame < this.assets[this._state].animation.length - 1) {

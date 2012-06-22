@@ -1,13 +1,36 @@
-define(function (require) {
-	return {
-		keys: require('utils/keyCodes'),
+define(['game/Player', 'utils/keyCodes', 'game/EntityFactory', 'render/Screen'], function (Player, keys, entityFactory, page) {
+	var Game = {},
+		VELOCITY = 8,
+		Players = [];
 
-		RATE30: 1000 / 30,
-		RATE60: 1000 / 60,
+	Game.keys = keys;
+	Game.VELOCITY = VELOCITY;
+	Game.Players = Players;
+	Game.entityFactory = entityFactory;
 
-		VELOCITY: 8,
+	Players.push(new Player('sprite'));
 
-		Players: [],
-		entityFactory: require('game/EntityFactory')
+	Game.update = function () {
+		var i = 0;
+
+		for (i = 0; i < Players.length; i += 1) {
+			Players[i].update();
+		}
+
+		entityFactory.update();
 	};
+
+	Game.draw = function () {
+		var i = 0;
+
+		page.clear();
+
+		for (i = 0; i < Players.length; i += 1) {
+			Players[i].draw();
+		}
+
+		entityFactory.draw();
+	};
+
+	return Game;
 });

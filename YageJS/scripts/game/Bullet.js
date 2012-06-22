@@ -1,9 +1,9 @@
 ﻿/*jslint browser: true, maxerr: 50, indent: 4 */
 /*global define*/
 define(['render/Screen',
+        'game/YageJS',
         'render/ArtAsset2d',
-        'game/Entity',
-        'game/YageJS'], function (page, Asset, Entity, Globals) {
+        'game/Entity'], function (page, Globals, Asset, Entity) {
 	'use strict';
 
 	Bullet.prototype = new Entity();
@@ -30,7 +30,7 @@ define(['render/Screen',
 				this._x += Globals.VELOCITY + this._vectorX;
 			}
 			if (this._vectorY !== 0) {
-				this._y += Globals.VELOCITY + this._vectorY;
+				this._y += 8 + this._vectorY;
 			}
 		}
 

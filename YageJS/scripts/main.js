@@ -3,39 +3,24 @@
 	scriptType: 'application/javascript'
 });
 
-require(['render/Screen', 'game/Player', 'game/YageJS', 'utils/systemEvents!'], function(page, Player, Globals) {
+require(['game/YageJS', 'utils/systemEvents!'], function(Game) {
 	'use strict';
 
+	var RATE30 = 1000 / 30,
+		RATE60 = 1000 / 60;
+
 	function update(rate) {
-		var i = 0;
-
-		for (i = 0; i < Globals.Players.length; i += 1) {
-			Globals.Players[i].update();
-		}
-
-		Globals.entityFactory.update();
-
+		Game.update();
 		setTimeout(function () { return update(rate); }, rate);
 	}
 
 	function draw(rate) {
-		var i = 0;
-
-		page.clear();
-
-		for (i = 0; i < Globals.Players.length; i += 1) {
-			Globals.Players[i].draw();
-		}
-
-		Globals.entityFactory.draw();
-
+		Game.draw();
 		setTimeout(function () { return draw(rate); }, rate);
 	}
 
-	Globals.Players.push(new Player('sprite'));
-
 	// start running the loops
-	update(Globals.RATE30);
-	draw(Globals.RATE30);
+	update(RATE30);
+	draw(RATE30);
 
 });
