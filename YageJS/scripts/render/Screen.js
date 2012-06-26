@@ -6,16 +6,23 @@ define(['lib/domReady!'], function (doc) {
 	var screen = {},
 		width = 640,
 		height = 480,
+		fontCSS = doc.createElelemtn('link');
 		canvas = doc.getElementById('screen'),
 		context;
 
+	fontCSS.href = 'http://fonts.googleapis.com/css?family=Press+Start+2P';
+	fontCSS.rel = 'stylesheet';
+	fontCSS.type = 'text/css';
+	doc.head.appendChild(fontCSS);
+
 	if (canvas === null) {
-		canvas = document.createElement('canvas');
+		canvas = doc.createElement('canvas');
 		canvas.setAttribute('id', 'screen');
-		document.body.insertBefore(canvas);
+		doc.body.insertBefore(canvas);
 	}
 
 	context = canvas.getContext('2d');
+	context.font = "font-family: 'Press Start 2P', cursive;";
 
 	screen.getWidth = function () {
 		return width;
