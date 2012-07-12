@@ -9,7 +9,7 @@ define(['lib/domReady!'], function (doc) {
 		canvas = doc.getElementById('screen'),
 		context;
 
-	if (canvas === null) {
+	if (!canvas) {
 		canvas = doc.createElement('canvas');
 		canvas.setAttribute('id', 'screen');
 		doc.body.insertBefore(canvas);
