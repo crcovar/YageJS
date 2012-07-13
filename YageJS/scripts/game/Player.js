@@ -1,10 +1,10 @@
 ﻿/*jslint browser: true, maxerr: 50, indent: 4 */
 /*global define*/
 define(['render/Screen',
-        'render/ArtAsset2d',
+        'render/ArtAssetFactory',
         'utils/EventHandler',
         'utils/keyCodes',
-        'game/Entity'], function (page, Asset, EventHandler, keys, Entity) {
+        'game/Entity'], function (page, artAssetFactory, EventHandler, keys, Entity) {
 	'use strict';
 	var keyboard = [],
 		VELOCITY = 8;
@@ -14,12 +14,11 @@ define(['render/Screen',
 	function Player(id) {
 		this.id = id;
 
-		this.x = 0;
-		this.y = 0;
+		this.x = 20;
+		this.y = 20;
 
-		this.assets = new Asset(id);
+		this.assets = artAssetFactory.load(id);
 		this.changeState('idle');
-		this.currentFrame = 0;
 
 		EventHandler.on('keydown', this.input);
 		EventHandler.on('keyup', this.input);
@@ -38,17 +37,19 @@ define(['render/Screen',
 	};
 
 	Player.prototype.moveUp = function () {
-		this.y -= VELOCITY;
-	};
-
-	Player.prototype.moveDown = function () {
 		this.y += VELOCITY;
 	};
 
+	Player.prototype.moveDown = function () {
+		this.y -= VELOCITY;
+	};
+
 	Player.prototype.changeState = function (state) {
-		if (Entity.prototype.changeState.call(this, state)) {
-			this.currentFrame = 0;
-		}
+		Entity.prototype.changeState.call(this, state);
+		this.assets.changeAnimation(state);
+	};
+
+	Player.prototype.getBoundingBox = function () {
 	};
 
 	Player.prototype.update = function () {
@@ -64,22 +65,10 @@ define(['render/Screen',
 		if (keyboard[keys.D] || keyboard[keys.RIGHT_ARROW]) {
 			this.moveRight();
 		}
-
-		if (this.currentFrame < this.assets[this._state].animation.length - 1) {
-			this.currentFrame += 1;
-		} else if (this.assets[this._state].repeat) {
-			this.currentFrame = 0;
-		}
 	};
 
 	Player.prototype.draw = function () {
-		page.drawImage(this.assets.image,
-					   this.assets.x[this.assets[this._state].animation[this.currentFrame]],
-					   this.assets.y[this.assets[this._state].animation[this.currentFrame]],
-					   this.assets.w[this.assets[this._state].animation[this.currentFrame]],
-					   this.assets.h[this.assets[this._state].animation[this.currentFrame]],
-					   this.x, this.y, this.assets.w[this.assets[this._state].animation[this.currentFrame]],
-					   this.assets.h[this.assets[this._state].animation[this.currentFrame]]);
+		this.assets.draw(this.x, this.y);
 	};
 
 	return Player;
