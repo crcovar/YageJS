@@ -1,4 +1,4 @@
-﻿define(['game/Bullet'], function(Bullet) {
+﻿define(function() {
 	'use strict';
 
 	var entities = [],
