@@ -43,8 +43,8 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 		if (this._x > (this._world.getWidth() - width / 2)) {
 			this._x = this._world.getWidth() - width / 2;
 		}
-		if (this._y < (this._world.getHeight() - height / 2)) {
-			this_y = this._world.getHeight() - height / 2;
+		if (this._y > (this._world.getHeight() - height / 2)) {
+			this._y = this._world.getHeight() - height / 2;
 		}
 	};
 
