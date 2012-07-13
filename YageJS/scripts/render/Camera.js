@@ -57,9 +57,7 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 	Camera.prototype.draw = function () {
 		screen.clear();
 
-		screen.drawImage(this._world.image, this._x - (width / 2),
-				this._world.getHeight() - this._y - (height / 2), width, height,
-				0, 0, width, height);
+		artAssetFactory.drawScreen(this._x - (width / 2), this._world.getHeight() - this._y - (height / 2), this._world);
 
 		this._subject.draw();
 	};

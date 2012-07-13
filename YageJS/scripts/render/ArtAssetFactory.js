@@ -53,6 +53,22 @@ define(['utils/EventHandler', 'render/Screen'], function (eventHandler, screen) 
 	};
 
 	/**
+	 * Provides the current width of the asset referenced.
+	 * @returns The width of the current frame
+	 */
+	ArtAssetRef.prototype.getWidth = function () {
+		return assets[this.id].w[assets[this.id][this.animation].sequence[this.currentFrame]];
+	};
+
+	/**
+	 * Provides the current height of the asset referenced.
+	 * @returns The height of the current frame
+	 */
+	ArtAssetRef.prototype.getHeight = function () {
+		return assets[this.id].h[assets[this.id][this.animation].sequence[this.currentFrame]];
+	};
+
+	/**
 	 * Fires off a draw event containing the world coordinates and reference
 	 * information. The event will be picked up by a Camera object that will
 	 * determine the view coordinates and call the draw method of the factory
@@ -92,21 +108,38 @@ define(['utils/EventHandler', 'render/Screen'], function (eventHandler, screen) 
 	};
 
 	/**
+	 * Draws an asset over the entire screen
+	 * @param x
+	 * @param y
+	 * @param ref
+	 */
+	assetFactory.drawScreen = function (/*int*/x, /*int*/y, /*ArtAssetRef*/ref) {
+		x = (x < 0) ? 0 : x;
+		y = (y < 0) ? 0 : y;
+		screen.drawImage(assets[ref.id].image,
+				x, y, screen.getWidth(), screen.getHeight(),
+				0, 0, screen.getWidth(), screen.getHeight());
+	};
+	/**
 	 * Draws an asset to the screen, based on the reference provided.
 	 * @param x
 	 * @param y
 	 * @param ref
 	 */
 	assetFactory.draw = function (/*int*/x, /*int*/y, /*ArtAssetRef*/ref) {
+		var width = assets[ref.id].w[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
+			height = assets[ref.id].h[assets[ref.id][ref.animation].sequence[ref.currentFrame]];
+
+		width = (width > screen.getWidth()) ? screen.getWidth() : width;
+		height = (height > screen.getHeight()) ? screen.getHeight() : height;
+
 		screen.drawImage(assets[ref.id].image,
 			assets[ref.id].x[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
 			assets[ref.id].y[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
-			assets[ref.id].w[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
-			assets[ref.id].h[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
-			x - (assets[ref.id].w[assets[ref.id][ref.animation].sequence[ref.currentFrame]] / 2),
-			y - (assets[ref.id].h[assets[ref.id][ref.animation].sequence[ref.currentFrame]] / 2),
-			assets[ref.id].w[assets[ref.id][ref.animation].sequence[ref.currentFrame]],
-			assets[ref.id].h[assets[ref.id][ref.animation].sequence[ref.currentFrame]]);
+			width, height,
+			x - (width / 2),
+			y - (height / 2),
+			width, height);
 	};
 
 	return assetFactory;
