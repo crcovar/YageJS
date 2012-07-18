@@ -2,16 +2,15 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 	var width = screen.getWidth(),
 		height = screen.getHeight();
 
-	function Drawable(x, y, image) {
-		this.x = x;
-		this.y = y;
-		this.image = image;
-	}
-
-	function Camera(/*Entity*/entity, /*World*/world) {
+	/**
+	 * Camera Object. Follows an entity around a given world
+	 * @param subject
+	 * @param world
+	 */
+	function Camera(/*Entity*/subject, /*World*/world) {
 		var self = this;
 
-		this._subject = entity;
+		this._subject = subject;
 		this._world = world;
 		this._toDraw = [];
 		this._x = 0;
@@ -20,8 +19,8 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 		/* used for scrolling, these are percent values (float) from the edges
 		of the camera to start scrolling. If these are null the camera will
 		never scroll on that axis. */
-		this._horizontalBound = null;
-		this._verticalBound = null;
+		this._horizontalBound = 0.63;
+		this._verticalBound = 0.3;
 
 		eventHandler.on('draw', function (event) { return self.onDraw(event); });
 	}
@@ -31,8 +30,17 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 	};
 
 	Camera.prototype.update = function () {
-		this._x = this._subject.x;
-		this._y = this._subject.y;
+		if (this._subject.x - this._x > this._horizontalBound * (width / 2)) {
+			this._x += (this._subject.x - this._x) - (this._horizontalBound * (width / 2));
+		} else if (this._x - this._subject.x > this._horizontalBound * (width / 2)) {
+			this._x -= (this._x - this._subject.x) - (this._horizontalBound * (width / 2));
+		}
+
+		if (this._subject.y - this._y > this._verticalBound * (height / 2)) {
+			this._y += (this._subject.y - this._y) - (this._verticalBound * (height / 2));
+		} else if (this._y - this._subject.y > this._verticalBound * (height / 2)) {
+			this._y -= (this._y - this._subject.y) - (this._verticalBound * (height / 2));
+		}
 
 		if (this._x < (width / 2)) {
 			this._x = width / 2;
