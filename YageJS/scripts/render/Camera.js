@@ -25,21 +25,32 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 		eventHandler.on('draw', function (event) { return self.onDraw(event); });
 	}
 
+	/**
+	 * Sets the world that binds the camera
+	 * @param world
+	 */
 	Camera.prototype.changeWorld = function (/*World*/world) {
 		this._world = world;
 	};
 
+	/**
+	 * If necessary moves the Camera as determined by bounds. Ensures Camera
+	 * stays within the confines of the set World
+	 */
 	Camera.prototype.update = function () {
-		if (this._subject.x - this._x > this._horizontalBound * (width / 2)) {
-			this._x += (this._subject.x - this._x) - (this._horizontalBound * (width / 2));
-		} else if (this._x - this._subject.x > this._horizontalBound * (width / 2)) {
-			this._x -= (this._x - this._subject.x) - (this._horizontalBound * (width / 2));
+		var hBound = this._horizontalBound * (width / 2),
+			vBound = this._verticalBound * (height / 2);
+
+		if (this._subject.x - this._x > hBound) {
+			this._x += (this._subject.x - this._x) - hBound;
+		} else if (this._x - this._subject.x > hBound) {
+			this._x -= (this._x - this._subject.x) - hBound;
 		}
 
-		if (this._subject.y - this._y > this._verticalBound * (height / 2)) {
-			this._y += (this._subject.y - this._y) - (this._verticalBound * (height / 2));
-		} else if (this._y - this._subject.y > this._verticalBound * (height / 2)) {
-			this._y -= (this._y - this._subject.y) - (this._verticalBound * (height / 2));
+		if (this._subject.y - this._y > vBound) {
+			this._y += (this._subject.y - this._y) - vBound;
+		} else if (this._y - this._subject.y > vBound) {
+			this._y -= (this._y - this._subject.y) - vBound;
 		}
 
 		if (this._x < (width / 2)) {
@@ -56,12 +67,20 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 		}
 	};
 
+	/**
+	 * Action to take when the Camera receives a draw event. In this case
+	 * compute view coordinates and call the draw method of the artAssetFactory
+	 * @param event
+	 */
 	Camera.prototype.onDraw = function (event) {
 		var x = event.x - (this._x - (width / 2)),
 			y = height - (event.y - (this._y - (height / 2)));
 		artAssetFactory.draw(x, y, event.reference);
 	};
 
+	/**
+	 * Clears the screen, draws the world, then draw other objects
+	 */
 	Camera.prototype.draw = function () {
 		screen.clear();
 
