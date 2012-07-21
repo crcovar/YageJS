@@ -12,7 +12,7 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 
 		this._subject = subject;
 		this._world = world;
-		this._toDraw = [];
+		this._queue = [];
 		this._x = 0;
 		this._y = 0;
 
@@ -73,9 +73,7 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 	 * @param event
 	 */
 	Camera.prototype.onDraw = function (event) {
-		var x = event.x - (this._x - (width / 2)),
-			y = height - (event.y - (this._y - (height / 2)));
-		artAssetFactory.draw(x, y, event.reference);
+		this._queue.push(event);
 	};
 
 	/**
@@ -87,6 +85,14 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 		artAssetFactory.drawScreen(this._x - (width / 2), this._world.getHeight() - this._y - (height / 2), this._world);
 
 		this._subject.draw();
+
+		while(this._queue.length > 0) {
+			var item = this._queue.pop(),
+				x = item.x - (this._x - (width / 2)),
+				y = height - (item.y - (this._y - (height / 2)));
+
+			artAssetFactory.draw(x, y, item.reference);
+		}
 	};
 
 	return Camera;
