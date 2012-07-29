@@ -1,7 +1,8 @@
 define(['utils/EventHandler', 'render/Screen'], function (eventHandler, screen) {
 	'use strict';
 
-	var assets = {},	// stores the ArtAsset objects
+	var request = new XMLHttpRequest(),
+		assets = {},	// stores the ArtAsset objects
 		counts = {},	// tracks the number of active references to an ArtAsset object
 		assetFactory = {};
 
@@ -12,11 +13,14 @@ define(['utils/EventHandler', 'render/Screen'], function (eventHandler, screen) 
 	 *           PNG file and related JSON file.
 	 */
 	function ArtAsset2d(/*String*/id) {
-		var request = new XMLHttpRequest(),
-			that = {};
+		var that = {};
 
 		request.open("GET", 'assets/' + id + '/' + id + '.json', false);
 		request.send();
+		if(request.status !== 200) {
+			return null;
+		}
+
 		that = JSON.parse(request.responseText);
 
 		that.image = new Image();

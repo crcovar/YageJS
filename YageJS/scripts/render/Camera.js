@@ -82,7 +82,7 @@ define(['render/ArtAssetFactory', 'render/Screen', 'utils/EventHandler'], functi
 	Camera.prototype.draw = function () {
 		screen.clear();
 
-		artAssetFactory.drawScreen(this._x - (width / 2), this._world.getHeight() - this._y - (height / 2), this._world);
+		artAssetFactory.drawScreen(this._x - (width / 2), this._world.getHeight() - this._y - (height / 2), this._world.asset);
 
 		this._subject.draw();
 

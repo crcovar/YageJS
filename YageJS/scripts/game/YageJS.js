@@ -4,9 +4,11 @@ define(['game/Player',
         'game/EntityFactory',
         'render/Camera',
         'render/Screen'], function (Player, World, keys, entityFactory, Camera, page) {
-	var Game = {},
+	var Game = {
+			id: 'sample'
+	},
 		player = new Player('sprite'),
-		world = new World('testWorld'),
+		world = new World(Game.id, 'level1'),
 		camera = new Camera(player, world);
 
 	Game.entityFactory = entityFactory;
