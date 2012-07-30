@@ -1,4 +1,4 @@
-﻿define(['utils/EventHandler'], function (EventHandler) {
+define(['utils/EventHandler'], function (EventHandler) {
 	'use strict';
 	var keyboard = new Array(128),
 
@@ -27,7 +27,7 @@
 
 	return {
 		load: function (name, req, load, config) {
-			if (typeof document !== undefined) {
+			if (typeof document !== 'undefined') {
 				document.addEventListener('keydown', onKeyDown, true);
 				document.addEventListener('keyup', onKeyUp, true);
 				document.addEventListener('mousedown', onMouseDown, true);
