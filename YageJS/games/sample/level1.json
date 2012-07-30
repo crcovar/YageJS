@@ -2,7 +2,8 @@
 	"world": {
 		"width": 1109,
 		"height": 824,
-		"asset": "testWorld" 
+		"asset": "testWorld",
+		"bgMusic": "Street_Fighter_2_Guile's_Theme_(RAH_Mix)_OC_ReMix" 
 	},
 	"spawnpoint": [{"x": 4, "y": 20}],
 	"platform": [

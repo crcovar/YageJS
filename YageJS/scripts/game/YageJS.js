@@ -15,6 +15,7 @@ define(['game/Player',
 
 	Game.update = function () {
 		player.update();
+		world.update();
 		camera.update();
 
 		entityFactory.update();

@@ -1,4 +1,4 @@
-define(['render/ArtAssetFactory'], function (artAssetFactory) {
+define(['render/ArtAssetFactory', 'utils/AudioAssetFactory'], function (artAssetFactory, audioAssetFactory) {
 	var request = new XMLHttpRequest(),
 		response;
 
@@ -8,22 +8,23 @@ define(['render/ArtAssetFactory'], function (artAssetFactory) {
 	 * Width and Height of the world must be at least the same as the Screen.
 	 */
 	function World(game, id) {
-		var that = {};
-
 		request.open('GET', 'games/' + game + '/' + id + '.json', false);
 		request.send();
 		if(request.status === 200) {
 			response = JSON.parse(request.responseText);
-			that.width = response.world.width;
-			that.height = response.world.height;
-			that.asset = artAssetFactory.load(response.world.asset);
+			this.width = response.world.width;
+			this.height = response.world.height;
+			this.asset = artAssetFactory.load(response.world.asset);
+			this.bgMusic = audioAssetFactory.load(response.world.bgMusic);
 
-			that.getWidth = function () { return this.width; };
-			that.getHeight = function () { return this.height; };
+			this.getWidth = function () { return this.width; };
+			this.getHeight = function () { return this.height; };
 		}
-
-		return that;
 	}
+
+	World.prototype.update = function () {
+		audioAssetFactory.play(this.bgMusic);
+	};
 
 	return World;
 });
