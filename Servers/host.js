@@ -8,37 +8,15 @@ function send404(res) {
     res.end(fs.readFileSync('Servers/404.html', 'utf8'));
 }
     
-function serveHtml(path, res) {
+function serveText(path, type, res) {
     var file;
     try {
-        file = fs.readFileSync(path);
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.end(file, 'utf8');
+        file = fs.readFileSync(path, 'utf8');
+        res.writeHead(200, {'Content-Type': type});
+        res.end(file);
     } catch (err) {
         send404(res);
     } 
-}
-    
-function serveJavascript(path, res) {
-    var file;
-    try {
-        file = fs.readFileSync(path, 'utf8');
-        res.writeHead(200, {'Content-Type': 'application/javascript'});
-        res.end(file);
-    } catch (err) {
-       send404(res);
-    }
-}
-
-function serveJson(path, res) {
-    var file;
-    try {
-        file = fs.readFileSync(path, 'utf8');
-        res.writeHead(200, {'Content-Type': 'application/json'});
-        res.end(file);
-    } catch (err) {
-        send404(res);
-    }
 }
 
 function servePng(path, res) {
@@ -53,7 +31,25 @@ function servePng(path, res) {
 }
 
 function serveAudio(path, res) {
-    send404(res);
+    var stat,
+        audioStream;
+    try {
+        stat = fs.statSync(path);
+        res.writeHead(200, {
+            'Content-Type': 'audio/mpeg3',
+            'Content-Length': stat.size
+        });
+        
+        audioStream = fs.createReadStream(path);
+        audioStream.on('data', function (data) {
+            res.write(data);
+        });
+        audioStream.on('end', function () {
+            res.end();
+        });
+    } catch (err) {
+        send404(res);
+    }
 }
 
 /* Setup environment settings if needed */
@@ -74,15 +70,15 @@ http.createServer(function (req, res) {
     }
         
     if (/\/$/.test(path)) {
-        serveHtml(path + 'index.html', res);
+        serveText(path + 'index.html', 'text/html', res);
     }
     
     if (/\.(?:js)$/.test(path)) {
-        serveJavascript(path, res);
+        serveText(path, 'application/javascript', res);
     }
     
     if (/\.(?:json)$/.test(path)) {
-        serveJson(path, res);
+        serveText(path, 'application/json', res);
     }
     
     if (/\.(?:png)$/.test(path)) {
