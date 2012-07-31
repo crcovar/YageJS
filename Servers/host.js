@@ -7,46 +7,27 @@ function send404(res) {
     res.writeHead(404, {'Content-Type': 'text/html'});
     res.end(fs.readFileSync('Servers/404.html', 'utf8'));
 }
-    
-function serveText(path, type, res) {
-    var file;
-    try {
-        file = fs.readFileSync(path, 'utf8');
-        res.writeHead(200, {'Content-Type': type});
-        res.end(file);
-    } catch (err) {
-        send404(res);
-    } 
-}
 
-function servePng(path, res) {
-    var file;
-    try {
-        file = fs.readFileSync(path);
-        res.writeHead(200, {'Content-Type': 'image/png'});
-        res.end(file);
-    } catch (err) {
-        send404(res);
-    }
-}
-
-function serveAudio(path, res) {
+function send(path, type, res) {
     var stat,
-        audioStream;
+        file;
+        
     try {
         stat = fs.statSync(path);
         res.writeHead(200, {
-            'Content-Type': 'audio/mpeg3',
+            'Content-Type': type,
             'Content-Length': stat.size
         });
-        
-        audioStream = fs.createReadStream(path);
-        audioStream.on('data', function (data) {
-            res.write(data);
-        });
-        audioStream.on('end', function () {
-            res.end();
-        });
+        switch (type) {
+            case 'audio/mpeg3':
+            case 'audio/wav':
+            case 'image/png':
+                fs.createReadStream(path).pipe(res);
+                break;
+            default:
+                res.end(fs.readFileSync(path, 'utf8'));
+                break;
+        }
     } catch (err) {
         send404(res);
     }
@@ -63,31 +44,15 @@ if (!process.env.PORT) {
 /* Create the hosting server */
 http.createServer(function (req, res) {
     var pathname = url.parse(req.url).pathname,
-        path = pathname.substr(1);
-        
-    if (path === '') {
-        send404(res);
-    }
-        
-    if (/\/$/.test(path)) {
-        serveText(path + 'index.html', 'text/html', res);
-    }
-    
-    if (/\.(?:js)$/.test(path)) {
-        serveText(path, 'application/javascript', res);
-    }
-    
-    if (/\.(?:json)$/.test(path)) {
-        serveText(path, 'application/json', res);
-    }
-    
-    if (/\.(?:png)$/.test(path)) {
-        servePng(path, res);
-    }
-    
-    if (/\.(?:mp3)$/.test(path) || /\.(?:wav)$/.test(path)) {
-        serveAudio(path, res);
-    }
+        path = pathname.substr(1),
+        type;
 
+    if (path.substr(-1) === '/') { type = 'text/html'; path += 'index.html'; }
+    if (path.substr(-3) === '.js') { type = 'application/javascript'; }
+    if (path.substr(-5) === '.json') { type = 'application/json'; }
+    if (path.substr(-4) === '.png') { type = 'image/png'; }
+    if (path.substr(-4) === '.mp3') { type = 'audio/mpeg3'; }
+
+    send(path, type, res);
 }).listen(process.env.PORT, process.env.IP);
 console.log('server running on ' + process.env.IP + ':' + process.env.PORT);
