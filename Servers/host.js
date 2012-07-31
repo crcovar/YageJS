@@ -9,9 +9,8 @@ function send404(res) {
 }
 
 function send(path, type, res) {
-    var stat,
-        file;
-        
+    var stat;
+
     try {
         stat = fs.statSync(path);
         res.writeHead(200, {
