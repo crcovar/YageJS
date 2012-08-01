@@ -2,14 +2,20 @@ var http = require("http"),
     url = require("url"),
     fs = require("fs");
 
-/* Functions for serving the different content */
-function send404(res) {
-    res.writeHead(404, {'Content-Type': 'text/html'});
-    res.end(fs.readFileSync('Servers/404.html', 'utf8'));
-}
-
-function send(path, type, res) {
-    var stat;
+/**
+ * Reads a url path and serves up the appropriate file.
+ * @param path Relative location to the project root of the object to be served.
+ * @param res The HTTP(S) Response object
+ */
+function send(path, res) {
+    var stat,
+        type;
+    
+    if (path.substr(-1) === '/') { type = 'text/html'; path += 'index.html'; }
+    if (path.substr(-3) === '.js') { type = 'application/javascript'; }
+    if (path.substr(-5) === '.json') { type = 'application/json'; }
+    if (path.substr(-4) === '.png') { type = 'image/png'; }
+    if (path.substr(-4) === '.mp3') { type = 'audio/mpeg'; }
 
     try {
         stat = fs.statSync(path);
@@ -17,18 +23,10 @@ function send(path, type, res) {
             'Content-Type': type,
             'Content-Length': stat.size
         });
-        switch (type) {
-            case 'audio/mpeg3':
-            case 'audio/wav':
-            case 'image/png':
-                fs.createReadStream(path).pipe(res);
-                break;
-            default:
-                res.end(fs.readFileSync(path, 'utf8'));
-                break;
-        }
+        fs.createReadStream(path).pipe(res);
     } catch (err) {
-        send404(res);
+        res.writeHead(404, {'Content-Type': 'text/html'});
+        fs.createReadStream('Servers/404.html').pipe(res);
     }
 }
 
@@ -43,15 +41,8 @@ if (!process.env.PORT) {
 /* Create the hosting server */
 http.createServer(function (req, res) {
     var pathname = url.parse(req.url).pathname,
-        path = pathname.substr(1),
-        type;
+        path = pathname.substr(1);
 
-    if (path.substr(-1) === '/') { type = 'text/html'; path += 'index.html'; }
-    if (path.substr(-3) === '.js') { type = 'application/javascript'; }
-    if (path.substr(-5) === '.json') { type = 'application/json'; }
-    if (path.substr(-4) === '.png') { type = 'image/png'; }
-    if (path.substr(-4) === '.mp3') { type = 'audio/mpeg3'; }
-
-    send(path, type, res);
+    send(path, res);
 }).listen(process.env.PORT, process.env.IP);
 console.log('server running on ' + process.env.IP + ':' + process.env.PORT);
