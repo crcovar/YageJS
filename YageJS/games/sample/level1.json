@@ -5,6 +5,11 @@
 		"asset": "testWorld",
 		"bgMusic": "Street_Fighter_2_Guile's_Theme_(RAH_Mix)_OC_ReMix" 
 	},
+    "red": [{"x": 50, "y": 50, "width": 4, "height": 1}],
+    "white": [
+        {"x": 100, "y": 100, "width": 1, "height": 12},
+        {"x": 200, "y": 100, "width": 2, "height": 6}
+    ],
 	"spawnpoint": [{"x": 4, "y": 20}],
 	"platform": [
 		{"x": 18, "y": 28, "width": 3, "height": 1},

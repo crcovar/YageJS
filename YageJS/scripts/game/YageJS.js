@@ -22,6 +22,7 @@ define(['game/Player',
 	};
 
 	Game.draw = function () {
+        world.draw();
 		camera.draw();
 	};
 
