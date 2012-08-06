@@ -7,6 +7,6 @@ if (!process.env.PORT) {
 
 connect().use(connect.logger())
     .use(connect.compress())
-    .use(connect.static(__dirname + '/..'))
+    .use(connect.static(__dirname + '/..')) // __dirname is Servers so go up one level
     .listen(process.env.PORT);
 console.log('server running on port ' + process.env.PORT);
