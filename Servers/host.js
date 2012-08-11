@@ -1,14 +1,10 @@
 var connect = require('connect'),
     full = __dirname + '/../YageJS',
-    min = __dirname + '/../YageJS-build/';
+    min = __dirname + '/../YageJS-build/',
+    port = process.env.PORT || 80;
 
-/* Setup environment settings if needed */
-if (!process.env.PORT) {
-    process.env.PORT = '80';
-}
-
-connect().use(connect.logger())
+connect().use(connect.logger('dev'))
     .use(connect.compress())
     .use(connect.static(full))
-    .listen(process.env.PORT);
-console.log('server running on port ' + process.env.PORT);
+    .listen(port);
+console.log('server running on port ' + port);
