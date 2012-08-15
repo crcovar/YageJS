@@ -11,10 +11,10 @@ define(['game/Player',
 		world = new World(Game.id, 'level1'),
 		camera = new Camera(player, world);
 
+	world.addPlayer(player);
 	Game.entityFactory = entityFactory;
 
 	Game.update = function () {
-		player.update();
 		world.update();
 		camera.update();
 

@@ -23,7 +23,7 @@ define(['render/ArtAssetFactory',
 
 			this.getWidth = function () { return this.width; };
 			this.getHeight = function () { return this.height; };
-            
+
             for (var key in response) {
                 switch (key) {
                     case 'red':
@@ -41,15 +41,37 @@ define(['render/ArtAssetFactory',
 		}
 	}
 
+	World.prototype.addPlayer = function (player) {
+		this.entities.push(player);
+	};
+
 	World.prototype.update = function () {
 		audioAssetFactory.play(this.bgMusic);
+
+		for (var i=0; i < this.entities.length; i++) {
+			this.entities[i].update();
+		}
+
+		for (var i = 0; i < this.entities.length; i++) {
+			var a = this.entities[i].getBoundingSphere();
+			for(var j = i+1; j < this.entities.length; j++) {
+				var b = this.entities[j].getBoundingSphere(),
+					d1 = Math.sqrt(Math.pow(b.x-a.x, 2) + Math.pow(b.y-a.y, 2)),
+					d2 = a.radius + b.radius;
+				if (d1 < d2) {
+					// Possible collision!
+					this.entities[i].collide(this.entities[j]);
+					this.entities[j].collide(this.entities[i]);
+				}
+			}
+		}
 	};
-    
+
     World.prototype.draw = function () {
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].draw();
         }
-    }
+    };
 
 	return World;
 });

@@ -49,7 +49,20 @@ define(['render/Screen',
 		this.assets.changeAnimation(state);
 	};
 
-	Player.prototype.getBoundingBox = function () {
+	Player.prototype.getBoundingSphere = function () {
+		var a = this.assets.getWidth() / 2,
+			b = this.assets.getHeight() / 2,
+			c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+
+		return {
+			x: this.x,
+			y: this.y,
+			radius: c
+		};
+	};
+
+	Player.prototype.collide = function (entity) {
+		console.log('player collision');
 	};
 
 	Player.prototype.update = function () {

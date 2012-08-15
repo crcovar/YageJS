@@ -18,6 +18,14 @@ define(function () {
 		return this._state;
 	};
 
+	Entity.prototype.getBoundingSphere = function () {
+		return null;
+	};
+
+	Entity.prototype.collide = function (entity) {
+		return null;
+	};
+
 	Entity.prototype.update = function () {
 		return;
 	};
