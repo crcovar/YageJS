@@ -80,7 +80,7 @@ define(['utils/EventHandler', 'render/Screen'], function (eventHandler, screen) 
 	ArtAssetRef.prototype.draw = function (/*int*/worldX, /*int*/worldY) {
 		if (this.currentFrame < assets[this.id][this.animation].sequence.length - 1) {
 			this.currentFrame++;
-		} else if (assets[this.id][this.animation.repeat]) {
+		} else if (assets[this.id][this.animation].repeat) {
 			this.currentFrame = 0;
 		}
 
